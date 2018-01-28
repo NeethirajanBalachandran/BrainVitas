@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BrainVitas</string>
+    <string name="txt_developer">Developer:</string>
+    <string name="developer_names">Neethirajan Balachandran</string>
+    <string name="menu">Menu</string>
+    <string name="next">Next</string>
+    <string name="retry">Retry</string>
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-1233786554019860/6112266233</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="dummy">Dummy</string>
+</resources>
