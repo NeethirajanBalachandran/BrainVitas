@@ -6,13 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Gravity;
@@ -27,7 +25,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
-public class DragDropManager
+class DragDropManager
 {
     private static DragDropManager instance;
     private Activity mActivity;
@@ -39,7 +37,7 @@ public class DragDropManager
     private Rect rect;
     private Object item;
 
-    public static DragDropManager getInstance()
+    static DragDropManager getInstance()
     {
         if (instance == null) instance = new DragDropManager();
         return instance;
@@ -49,40 +47,26 @@ public class DragDropManager
     {
     }
 
-    public void init(Activity a)
+    void init(Activity a)
     {
         mActivity = a;
-        dropzones = new ArrayList<View>();
-        dropzonelisteners = new HashMap<View, DropZoneListener>();
-        dropzonestates = new HashMap<View, Integer>();
+        dropzones = new ArrayList<>();
+        dropzonelisteners = new HashMap<>();
+        dropzonestates = new HashMap<>();
         rect = new Rect();
     }
 
-    public void addDropZone(View zone, DropZoneListener zonelistener)
+    void addDropZone(View zone, DropZoneListener zonelistener)
     {
         dropzones.add(zone);
         dropzonelisteners.put(zone, zonelistener);
         dropzonestates.put(zone, 0);
     }
 
-    public void clearZones()
-    {
-        dropzones.clear();
-        dropzonelisteners.clear();
-        dropzonestates.clear();
-    }
-
-    public void clearZone(View zone)
-    {
-        dropzones.remove(zone);
-        dropzonelisteners.remove(zone);
-        dropzonestates.remove(zone);
-    }
-
     private void checkDropZones(MotionEvent event)
     {
         boolean isOver;
-        HashSet<DropZoneListener> listeners = new HashSet<DropZoneListener>(dropzonelisteners.values());
+        HashSet<DropZoneListener> listeners = new HashSet<>(dropzonelisteners.values());
 
         for (View zone : dropzones)
         {
@@ -127,8 +111,7 @@ public class DragDropManager
         }
     }
 
-    @SuppressWarnings("deprecation")
-	public void startDragging(final View dragView, Object item)
+    void startDragging(final View dragView, Object item)
     {
         this.item = item;
         // Copy view Bitmap (Clone Object visual)
@@ -162,28 +145,24 @@ public class DragDropManager
         @Override
         public boolean dispatchGenericMotionEvent(MotionEvent event)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean dispatchKeyEvent(KeyEvent event)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean dispatchKeyShortcutEvent(KeyEvent event)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
@@ -192,11 +171,11 @@ public class DragDropManager
         {
             checkDropZones(event);
 
-            if (event.getAction() == MotionEvent.ACTION_DOWN)
-            {
+            //if (event.getAction() == MotionEvent.ACTION_DOWN)
+            //{
                 // popoup.update((int)event.getRawX(), (int)event.getRawY(), -1,
                 // -1);
-            }
+            //}
 
             if (event.getAction() == MotionEvent.ACTION_MOVE)
             {
@@ -229,124 +208,98 @@ public class DragDropManager
             return false;
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void onActionModeFinished(ActionMode mode)
         {
-            // TODO Auto-generated method stub
 
         }
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void onActionModeStarted(ActionMode mode)
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onAttachedToWindow()
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onContentChanged()
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public boolean onCreatePanelMenu(int featureId, Menu menu)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public View onCreatePanelView(int featureId)
         {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public void onDetachedFromWindow()
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public boolean onMenuItemSelected(int featureId, MenuItem item)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean onMenuOpened(int featureId, Menu menu)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public void onPanelClosed(int featureId, Menu menu)
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public boolean onPreparePanel(int featureId, View view, Menu menu)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean onSearchRequested()
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public boolean onSearchRequested(SearchEvent e)
         {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         public void onWindowAttributesChanged(android.view.WindowManager.LayoutParams attrs)
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onWindowFocusChanged(boolean hasFocus)
         {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public ActionMode onWindowStartingActionMode(Callback callback)
         {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public ActionMode onWindowStartingActionMode(Callback callback, int i)
         {
-            // TODO Auto-generated method stub
             return null;
         }
 

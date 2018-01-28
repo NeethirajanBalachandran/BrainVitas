@@ -5,7 +5,6 @@ import java.util.Locale;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,25 +32,24 @@ public class OptionsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_options);
 
-		mAdView = (AdView) findViewById(R.id.adView);
+		mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
-        TextView tx = (TextView)findViewById(R.id.lblSound);
-        tx.setText("Sound: ");
-		databasecreation();
+        TextView tx = findViewById(R.id.lblSound);
+        tx.setText(R.string.lblSound);
+		databaseCreation();
 		sound();
-		coinset();
+		coinSet();
 		setPrevNext();
 	}
 	private void setPrevNext() {
-		final ImageView prev = (ImageView)findViewById(R.id.back);
-		final ImageView next = (ImageView)findViewById(R.id.next);
+		final ImageView prev = findViewById(R.id.back);
+		final ImageView next = findViewById(R.id.next);
 		prev.setImageBitmap(GetPrevNextImage(1));
 		next.setImageBitmap(GetPrevNextImage(3));
 		prev.setOnTouchListener(new OnTouchListener() {
-			@SuppressLint("ClickableViewAccessibility")
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
@@ -69,7 +67,6 @@ public class OptionsActivity extends Activity {
 			}
 		});
 		next.setOnTouchListener(new OnTouchListener() {
-			@SuppressLint("ClickableViewAccessibility")
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
@@ -90,7 +87,7 @@ public class OptionsActivity extends Activity {
 		int coin = preferences.getInt("Coin", 1);
 		String strW = preferences.getString("Width", "0");
 		int ww = Integer.parseInt("0" + strW);
-		ImageView img =(ImageView)findViewById(R.id.coin);
+		ImageView img =findViewById(R.id.coin);
 		img.setImageBitmap(GetCoinSetImage(coin));
 		img.getLayoutParams().width = (int) (ww * 0.30);
 		img.getLayoutParams().height = (int) (ww * 0.60);
@@ -100,7 +97,7 @@ public class OptionsActivity extends Activity {
 		SharedPreferences.Editor editor = preferences.edit();
 		int coin = preferences.getInt("Coin", 1);
 		if (coin > 1){
-			ImageView img =(ImageView)findViewById(R.id.coin);
+			ImageView img =findViewById(R.id.coin);
 			img.setImageBitmap(GetCoinSetImage(coin-1));
 			editor.putInt("Coin", coin-1);
 			editor.apply();
@@ -112,7 +109,7 @@ public class OptionsActivity extends Activity {
 		SharedPreferences.Editor editor = preferences.edit();
 		int coin = preferences.getInt("Coin", 1);
 		if (coin < 6){
-			ImageView img =(ImageView)findViewById(R.id.coin);
+			ImageView img =findViewById(R.id.coin);
 			img.setImageBitmap(GetCoinSetImage(coin+1));
 			editor.putInt("Coin", coin+1);
 			editor.apply();
@@ -136,18 +133,18 @@ public class OptionsActivity extends Activity {
 		return bitmap;
 	}
 	private void sound() {
-		final Button btn = (Button)findViewById(R.id.soundonoff);
+		final Button btn = findViewById(R.id.soundonoff);
 		SharedPreferences preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 		final SharedPreferences.Editor editor = preferences.edit();
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				if (btn.getText().equals("On")){
-					btn.setText("Off");
+					btn.setText(R.string.off);
 					editor.putString("Sound", "Off");
 					myDB.execSQL("UPDATE Options Set value = 2 Where id = 2;");
 				} else {
-					btn.setText("On");
+					btn.setText(R.string.on);
 					editor.putString("Sound", "On");
 					myDB.execSQL("UPDATE Options Set value = 1 Where id = 2;");
 				}
@@ -160,19 +157,20 @@ public class OptionsActivity extends Activity {
 			int OnOrOff = c1.getInt(1);
 			if (OnOrOff == 1){
 				editor.putString("Sound", "On");
-				btn.setText("On");
+				btn.setText(R.string.on);
 			} else {
 				editor.putString("Sound", "Off");
-				btn.setText("Off");
+				btn.setText(R.string.off);
 			}
 		} else {
 			editor.putString("Sound", "On");
-			btn.setText("On");
+			btn.setText(R.string.on);
 			myDB.execSQL("INSERT INTO Options (id, value)  VALUES (1,1);");
 		}
 		editor.apply();
+		c1.close();
 	}
-	private void coinset() {
+	private void coinSet() {
 		SharedPreferences preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		Cursor c1 = myDB.rawQuery("SELECT * FROM Options Where id = 2;", null);
@@ -184,11 +182,12 @@ public class OptionsActivity extends Activity {
 			myDB.execSQL("INSERT INTO Options (id, value)  VALUES (2,1);");
 		}
 		editor.apply();
+		c1.close();
 	}
-	private void databasecreation() {
+	private void databaseCreation() {
 		//database creation start
-		String dbname  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
-		myDB = openOrCreateDatabase(dbname , Context.MODE_PRIVATE, null);
+		String dbName  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
+		myDB = openOrCreateDatabase(dbName , Context.MODE_PRIVATE, null);
 	    myDB.setVersion(1);
 	    myDB.setLocale(Locale.getDefault());
 	    myDB.execSQL("CREATE TABLE IF NOT EXISTS Options (id INT(2), value INT(4));");

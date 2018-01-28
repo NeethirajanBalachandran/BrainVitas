@@ -67,9 +67,9 @@ public class AppMain extends Activity {
 				finish();
 			}
 		});
-		databasecreation();
+		databaseCreation();
 		sound();
-		coinset();
+		coinSet();
 	}
 	private void sound() {
 		SharedPreferences preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
@@ -88,8 +88,9 @@ public class AppMain extends Activity {
 			myDB.execSQL("INSERT INTO Options (id, value)  VALUES (1,1);");
 		}
 		editor.apply();
+		c1.close();
 	}
-	private void coinset() {
+	private void coinSet() {
 		SharedPreferences preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
 		Cursor c1 = myDB.rawQuery("SELECT * FROM Options Where id = 2;", null);
@@ -101,22 +102,27 @@ public class AppMain extends Activity {
 			myDB.execSQL("INSERT INTO Options (id, value)  VALUES (2,1);");
 		}
 		editor.apply();
+		c1.close();
 	}
-	private void databasecreation() {
+	private void databaseCreation() {
 		//database creation start
-		String dbname  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
-		myDB = openOrCreateDatabase(dbname , Context.MODE_PRIVATE, null);
+		String dbName  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
+		myDB = openOrCreateDatabase(dbName , Context.MODE_PRIVATE, null);
 	    myDB.setVersion(1);
 	    myDB.setLocale(Locale.getDefault());
 	    myDB.execSQL("CREATE TABLE IF NOT EXISTS Options (id INT(2), value INT(4));");
 	}
 	@Override
 	public void onPause() {
-	    super.onPause();
+		super.onPause();
 	}
 	@Override
 	public void onResume() {
-	    super.onResume();
+		super.onResume();
+	}
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 	@Override
 	public void onBackPressed() {

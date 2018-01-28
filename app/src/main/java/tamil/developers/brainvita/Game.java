@@ -5,7 +5,6 @@ import java.util.Locale;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +30,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.xml.sax.Parser;
+
 import tamil.developers.brainvita.DragDropManager.DropZoneListener;
 
 public class Game extends Activity implements OnTouchListener {
@@ -53,7 +54,7 @@ public class Game extends Activity implements OnTouchListener {
 		false, false, false, false};
 	private Chronometer crono;
 	boolean first_click = true;
-	int timeINmin = 0;
+	int timeInMin = 0;
 	private PopupWindow pw;
 	MediaPlayer mp;
 	int final_score = 0;
@@ -64,10 +65,9 @@ public class Game extends Activity implements OnTouchListener {
 	String move;
 	boolean completed = false;
     static SQLiteDatabase myDB;
-    int Coinselected = 0;
     int[] content;
     int[] content1;
-    int coinset = 1;
+    int coinSet = 1;
     Bitmap bm_normal;
     Bitmap bm_empty;
     @Override
@@ -75,7 +75,7 @@ public class Game extends Activity implements OnTouchListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         
-        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
@@ -84,23 +84,23 @@ public class Game extends Activity implements OnTouchListener {
     	GAME = prfs.getInt("Game", 0);
         init_sound();
         init_value();
-    	GetCoinImage(coinset);
+    	GetCoinImage(coinSet);
         DragDropManager.getInstance().init(this);
         Create_Layout();
         move = ptn.movement(GAME);
     }
 	private void Create_Layout() {
-    	row = ptn.rowcol[GAME][0];
-    	col = ptn.rowcol[GAME][1];
+    	row = ptn.rowCol[GAME][0];
+    	col = ptn.rowCol[GAME][1];
     	content = new int[row*col];
     	content1 = new int[ptn.coinCount(GAME)];
 		int pw = (int)((w * 0.95)/col);
-		int ph = (int)(w/row);
-		RelativeLayout rl = (RelativeLayout)findViewById(R.id.Gamelayout);
+		int ph = (w/row);
+		RelativeLayout rl = findViewById(R.id.Gamelayout);
 		int id = 0;
 		for (int i=0;i<ptn.Patterns[GAME].length;i++){
 			RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(pw, ph);
-		    rlp.setMargins((int)((i%col)*pw),(int)(((int)(i/col))*ph), 0, 0);
+		    rlp.setMargins(((i%col)*pw),((i/col)*ph), 0, 0);
 			ImageView coinImg = new ImageView(this);
 			if (ptn.Patterns[GAME][i] == 1){
 				coinImg.setImageBitmap(bm_empty);
@@ -154,9 +154,9 @@ public class Game extends Activity implements OnTouchListener {
     	String strH = prfs.getString("Height", "0");
     	w = Integer.parseInt("0" + strW);
     	h = Integer.parseInt("0" + strH);
-    	coinset = prfs.getInt("Coin", 1);
+		coinSet = prfs.getInt("Coin", 1);
 		first_click = true;
-		timeINmin = 0;
+		timeInMin = 0;
 		final_score = 0;
 	}
     DropZoneListener dropZoneListener1 = new DropZoneListener() {
@@ -166,7 +166,7 @@ public class Game extends Activity implements OnTouchListener {
         	if (!completed){
 	            int str_from = Integer.parseInt("0" + item);
 				if (zone.getId() == R.id.container){
-	        		ImageView img = (ImageView)findViewById(str_from);
+	        		ImageView img = findViewById(str_from);
 					img.setImageBitmap(bm_empty);
 					completed = true;
 					return;
@@ -176,11 +176,11 @@ public class Game extends Activity implements OnTouchListener {
 				boolean right = false;
 				if (str_mid > 0) right = check_ids(str_from,str_to,str_mid);
 	            if (right) {
-					ImageView img = (ImageView)findViewById(str_from);
+					ImageView img = findViewById(str_from);
 					img.setImageBitmap(bm_normal);
-					img = (ImageView)findViewById(str_to);
+					img = findViewById(str_to);
 					img.setImageBitmap(bm_empty);
-					img = (ImageView)findViewById(str_mid);
+					img = findViewById(str_mid);
 					img.setImageBitmap(bm_normal);
 					aryBools[str_from-1] = true;
 					aryBools[str_to-1] = false;
@@ -190,7 +190,7 @@ public class Game extends Activity implements OnTouchListener {
 				}
 	            else {
 	            	sound(false);
-	            	ImageView img = (ImageView)findViewById(str_from);
+	            	ImageView img = findViewById(str_from);
 					img.setImageBitmap(bm_empty);
 					completed = true;
 	            }
@@ -220,10 +220,10 @@ public class Game extends Activity implements OnTouchListener {
     }
     private boolean check_is_move_there() {
 		boolean rtn = true;
-    	String[] movearr = move.split("=");
+    	String[] moveArr = move.split("=");
 		for (int i = 0 ; i < ptn.coinCount(GAME) ; i ++) {
 			if (aryBools[i] == false){
-				String[] new_move = movearr[i].split(":");
+				String[] new_move = moveArr[i].split(":");
 				for (int j = 0 ; j < new_move.length ; j ++) {
 					boolean right = check_ids(i+1, Integer.parseInt(new_move[j]),findMidNumber(i+1,Integer.parseInt(new_move[j])));
 					if (right) {
@@ -268,19 +268,18 @@ public class Game extends Activity implements OnTouchListener {
     	}
  	}
     public void startCrono() {
-		 this.crono = (Chronometer) findViewById(R.id.calling_crono);
+		 this.crono = findViewById(R.id.calling_crono);
 		 crono.setBase(SystemClock.elapsedRealtime());
 		 crono.start();
 		 crono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
 		     @Override
 		     public void onChronometerTick(Chronometer chronometer) {
-	    		 TextView txtview = (TextView)findViewById(R.id.timer);
-	    		 timeINmin = timeINmin + 1;
-	    		 txtview.setText(""  + timeINmin);
+	    		 TextView txt = findViewById(R.id.timer);
+				 timeInMin += 1;
+	    		 txt.setText((timeInMin + ""));
 		     }
 		});
 	}
-	@SuppressLint("InflateParams")
 	public void stopCrono() {
 		crono.stop();
 		int count = 0;
@@ -296,9 +295,9 @@ public class Game extends Activity implements OnTouchListener {
 		if (c1.getCount() > 0){
 			c1.moveToFirst();
 			if (c1.getInt(2) >= count || c1.getInt(2) == 0){
-				if (c1.getInt(1) > timeINmin || c1.getInt(1) == 0){
-					myDB.execSQL("UPDATE Result SET btime = " + timeINmin + " Where id = " + GAME + ";");
-					best_time = timeINmin;
+				if (c1.getInt(1) > timeInMin || c1.getInt(1) == 0){
+					myDB.execSQL("UPDATE Result SET btime = " + timeInMin + " Where id = " + GAME + ";");
+					best_time = timeInMin;
 				} else {
 					best_time = c1.getInt(1);
 				}
@@ -313,17 +312,17 @@ public class Game extends Activity implements OnTouchListener {
 		View layout = inflater.inflate(R.layout.finish_box, null, false);
 		pw = new PopupWindow(layout, (int) (w * 0.80), (int) (h * 0.30), true);
 		pw.showAtLocation(layout, Gravity.CENTER, 0, 0);
-		Button btn = (Button) layout.findViewById(R.id.menu);
+		Button btn = layout.findViewById(R.id.menu);
 		btn.setOnClickListener(menu);
-		btn = (Button) layout.findViewById(R.id.next);
+		btn = layout.findViewById(R.id.next);
 		btn.setOnClickListener(next);
-		btn = (Button) layout.findViewById(R.id.retry);
+		btn = layout.findViewById(R.id.retry);
 		btn.setOnClickListener(retry);
 		
-		TextView txt = (TextView)layout.findViewById(R.id.score);
-		if (count == 1) txt.setText("Game Completed in " + timeINmin + "sec.");
-		else txt.setText("Game Completed in " + timeINmin + "sec, remaining coins are " + count + ".");
-		txt = (TextView)layout.findViewById(R.id.best);
+		TextView txt = layout.findViewById(R.id.score);
+		if (count == 1) txt.setText("Game Completed in " + timeInMin + "sec.");
+		else txt.setText("Game Completed in " + timeInMin + "sec, remaining coins are " + count + ".");
+		txt = layout.findViewById(R.id.best);
 		c1 = myDB.rawQuery("SELECT * FROM Result Where id = " + GAME, null);
 		if (c1.getCount() > 0){
 			c1.moveToFirst();

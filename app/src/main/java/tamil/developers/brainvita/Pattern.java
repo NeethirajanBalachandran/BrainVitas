@@ -1,6 +1,6 @@
 package tamil.developers.brainvita;
 
-public class Pattern {
+class Pattern {
 	int[][] Patterns = {
 		{0,0,1,1,1,0,0,
 		0,0,1,1,1,0,0,
@@ -78,20 +78,20 @@ public class Pattern {
 		0,0,0,1,1,1,0,0,0,
 		0,0,0,1,1,1,0,0,0} 
 	};
-	int[][] rowcol = {{7,7},{7,7},{7,7},{7,7},{7,7},{7,7},{7,5},{7,5},{5,5},{9,9}};
-	public int coinCount(int game){
+	int[][] rowCol = {{7,7},{7,7},{7,7},{7,7},{7,7},{7,7},{7,5},{7,5},{5,5},{9,9}};
+	int coinCount(int game){
 		int count = 0;
 		for (int i=0; i<Patterns[game].length;i++){
 			if (Patterns[game][i] > 0) count++;
 		}
 		return count;
 	}
-	public String movement(int game){
+	String movement(int game){
 		String moving = "";
 		String moving1 = "";
 		int[] pattern = Patterns[game];
-		int r = rowcol[game][0];
-		int c = rowcol[game][1];
+		int r = rowCol[game][0];
+		int c = rowCol[game][1];
 		for (int i=0; i<pattern.length; i++){
 			if (pattern[i] > 0){
 				int x = i % c; 
@@ -127,7 +127,7 @@ public class Pattern {
 		moving = moving.substring(0, moving.length()-1);
 		return moving;
 	}
-	public int seq(int game, int to){
+	private int seq(int game, int to){
 		int count = 0;
 		for (int i=0; i<=to;i++){
 			if (Patterns[game][i] >0) count++;

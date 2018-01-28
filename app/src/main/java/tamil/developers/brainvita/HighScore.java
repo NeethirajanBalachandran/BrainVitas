@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +25,12 @@ public class HighScore extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list);
-		databasecreation();
-		ListView listView = (ListView) findViewById(R.id.listView1);
+		databaseCreation();
+		ListView listView = findViewById(R.id.listView1);
 		final ArrayList<Map<String, String>> list = buildData();
 	    String[] from = { "text1", "text2" };
 	    int[] to = {R.id.text1, R.id.text2 }; 
 	    SimpleAdapter adapter = new SimpleAdapter(this, list,R.layout.level_list_layout, from, to){
-            @SuppressLint("InflateParams")
 			@Override
 	        public View getView(int pos, View convertView, ViewGroup parent){
 	            View v = convertView;
@@ -53,16 +51,16 @@ public class HighScore extends Activity {
 		};
 		listView.setAdapter(adapter);
 	}
-	private void databasecreation() {
+	private void databaseCreation() {
 		//database creation start
-		String dbname  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
-		myDB = openOrCreateDatabase(dbname , Context.MODE_PRIVATE, null);
+		String dbName  = this.getFilesDir().getPath() + "/" + getPackageName()+"/Brain_vita.db";
+		myDB = openOrCreateDatabase(dbName , Context.MODE_PRIVATE, null);
 	    myDB.setVersion(1);
 	    myDB.setLocale(Locale.getDefault());
 	    myDB.execSQL("CREATE TABLE IF NOT EXISTS Result (id INT(3), btime INT(4), coinrem INT(2), count INT(5));");
 	}
 	private ArrayList<Map<String, String>> buildData() {
-		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> list = new ArrayList<>();
 	    int count = ptn.Patterns.length;
 	    for (int i=0; i<count; i++){
 	    	Cursor c1 = myDB.rawQuery("SELECT * FROM Result Where id = " + i, null);
@@ -77,7 +75,7 @@ public class HighScore extends Activity {
 	    return list;
 	}
 	private HashMap<String, String> putData(String text1, String text2) {
-	    HashMap<String, String> item = new HashMap<String, String>();
+	    HashMap<String, String> item = new HashMap<>();
 	    item.put("text1", text1);
 	    item.put("text2", text2);
 	    return item;

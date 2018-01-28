@@ -5,8 +5,9 @@
     <string name="menu">Menu</string>
     <string name="next">Next</string>
     <string name="retry">Retry</string>
-    <string name="on">on</string>
-    <string name="off">off</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="lblSound">Sound: </string>
     <string name="banner_ad_unit_id_test">ca-app-pub-1233786554019860/6112266233</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="dummy">Dummy</string>

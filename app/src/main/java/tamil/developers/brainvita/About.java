@@ -20,7 +20,7 @@ public class About extends Activity {
 	}
 	@Override
 	public void onBackPressed() {
-		Intent openMainList = new Intent(About.this, AppMain.class);
+		Intent openMainList = new Intent(this, AppMain.class);
     	startActivity(openMainList);
     	finish();
 	}
